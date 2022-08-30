@@ -3,33 +3,31 @@ using API.Nft.Domain;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-
 namespace API.Nft.Controllers
 {
     [Route("[controller]")]
     [ApiController]
-    public class ProductController : ControllerBase
+    public class CategoryController : ControllerBase
     {
         private readonly AppDbContext _context;
 
-        public ProductController(AppDbContext context)
+        public CategoryController(AppDbContext context)
         {
             _context = context;
         }
-    
-        // GET: /<ProductController>
+
+        // GET: /<CategoryController>
         [HttpGet]
-        public ActionResult<IEnumerable<Product>> Get()
+        public ActionResult<IEnumerable<Category>> Get()
         {
             try
             {
-                var products = _context.Products?.AsNoTracking().Take(10).ToList();
-                if (products is null)
+                var categories = _context.Categories?.AsNoTracking().ToList();
+                if (categories is null)
                 {
-                    return NotFound("Nenhum produto foi encontrado.");
+                    return NotFound("Não foi encontrada essa categoria.");
                 }
-                return products;
+                return categories;
             }
             catch (Exception)
             {
@@ -37,21 +35,20 @@ namespace API.Nft.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError,
                     "Ocorreu um problema ao tratar sua solicitação.");
             }
-
         }
 
-        // GET /<ProductController>/5
-        [HttpGet("{id:int}", Name ="ObterProduto")]
-        public ActionResult<Product> Get(int id)
+        // GET /<CategoryController>/5
+        [HttpGet("{id:int}", Name = "ObterCategoria")]
+        public ActionResult<Category> Get(int id)
         {
             try
             {
-                var product = _context.Products.FirstOrDefault(p => p.Id == id);
-                if (product is null)
+                var category = _context.Categories?.FirstOrDefault(p => p.CategoryId == id);
+                if (category is null)
                 {
-                    return NotFound("Produto não encontrado...");
+                    return NotFound("Categoria não encontrada...");
                 }
-                return product;
+                return category;
             }
             catch (Exception)
             {
@@ -59,25 +56,24 @@ namespace API.Nft.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError,
                     "Ocorreu um problema ao tratar sua solicitação.");
             }
-            
         }
 
-        // POST /<ProductController>
+        // POST /<CategoryController>
         [HttpPost]
-        public ActionResult Post(Product product)
+        public ActionResult Post(Category category)
         {
             try
             {
-                if (product is null)
+                if (category is null)
                 {
                     return BadRequest();
                 }
 
-                _context.Products.Add(product);
+                _context.Categories?.Add(category);
                 _context.SaveChanges();
 
-                return new CreatedAtRouteResult("ObterProduto",
-                    new { id = product.Id }, product);
+                return new CreatedAtRouteResult("ObterCategoria",
+                    new { id = category.CategoryId }, category);
             }
             catch (Exception)
             {
@@ -85,24 +81,23 @@ namespace API.Nft.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError,
                     "Ocorreu um problema ao tratar sua solicitação.");
             }
-            
         }
 
-        // PUT /<ProductController>/5
+        // PUT /<CategoryController>/5
         [HttpPatch("{id}")]
-        public ActionResult Patch(int id, Product product)
+        public ActionResult Patch(int id, Category category)
         {
             try
             {
-                var productToChange = _context.Products.FirstOrDefault(p => p.Id == id);
-                if (productToChange is null)
+                var categoryToChange = _context.Categories?.FirstOrDefault(p => p.CategoryId == id);
+                if (categoryToChange is null)
                 {
-                    return NotFound("Produto não encontrado...");
+                    return NotFound("Categoria não encontrada...");
                 }
-                _context.Update(productToChange);
+                _context.Update(categoryToChange);
                 _context.SaveChanges();
 
-                return Ok(productToChange);
+                return Ok(categoryToChange);
             }
             catch (Exception)
             {
@@ -112,21 +107,21 @@ namespace API.Nft.Controllers
             }
         }
 
-        // DELETE /<ProductController>/5
+        // DELETE /<CategoryController>/5
         [HttpDelete("{id}")]
         public ActionResult Delete(int id)
         {
             try
             {
-                var product = _context.Products?.Find(id);
-                if (product is null)
+                var category = _context.Categories?.Find(id);
+                if (category is null)
                 {
                     return NotFound("Produto não localizado...");
                 }
-                _context.Products?.Remove(product);
+                _context.Categories?.Remove(category);
                 _context.SaveChanges();
 
-                return Ok(product);
+                return Ok(category);
             }
             catch (Exception)
             {

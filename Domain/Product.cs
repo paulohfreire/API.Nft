@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace API.Nft.Domain
 {
@@ -20,8 +21,10 @@ namespace API.Nft.Domain
         public DateTime? Expire_at { get; set; }
 
         public int CategoryId { get; set; }
+        [JsonIgnore]
         public Category? Category { get; set; }
         public int OwnerId { get; set; }
+        [JsonIgnore]
         public Owner? Owner { get; set; }
 
     }

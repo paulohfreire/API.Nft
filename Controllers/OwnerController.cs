@@ -3,33 +3,30 @@ using API.Nft.Domain;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-
 namespace API.Nft.Controllers
 {
     [Route("[controller]")]
     [ApiController]
-    public class ProductController : ControllerBase
+    public class OwnerController : ControllerBase
     {
         private readonly AppDbContext _context;
-
-        public ProductController(AppDbContext context)
+        public OwnerController(AppDbContext context)
         {
             _context = context;
         }
-    
-        // GET: /<ProductController>
+
+        // GET: /<OwnerController>
         [HttpGet]
-        public ActionResult<IEnumerable<Product>> Get()
+        public ActionResult<IEnumerable<Owner>> Get()
         {
             try
             {
-                var products = _context.Products?.AsNoTracking().Take(10).ToList();
-                if (products is null)
+                var owner = _context.Owner?.ToList();
+                if (owner is null)
                 {
-                    return NotFound("Nenhum produto foi encontrado.");
+                    return NotFound("Não foi encontrado esse usuário.");
                 }
-                return products;
+                return owner;
             }
             catch (Exception)
             {
@@ -37,21 +34,20 @@ namespace API.Nft.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError,
                     "Ocorreu um problema ao tratar sua solicitação.");
             }
-
         }
 
-        // GET /<ProductController>/5
-        [HttpGet("{id:int}", Name ="ObterProduto")]
-        public ActionResult<Product> Get(int id)
+        // GET /<OwnerController>/5
+        [HttpGet("{id:int}", Name = "ObterUsuario")]
+        public ActionResult<Owner> Get(int id)
         {
             try
             {
-                var product = _context.Products.FirstOrDefault(p => p.Id == id);
-                if (product is null)
+                var owner = _context.Owner?.FirstOrDefault(p => p.OwnerId == id);
+                if (owner is null)
                 {
-                    return NotFound("Produto não encontrado...");
+                    return NotFound("Usuário não encontrado...");
                 }
-                return product;
+                return owner;
             }
             catch (Exception)
             {
@@ -59,25 +55,24 @@ namespace API.Nft.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError,
                     "Ocorreu um problema ao tratar sua solicitação.");
             }
-            
         }
 
-        // POST /<ProductController>
+        // POST /<OwnerController>
         [HttpPost]
-        public ActionResult Post(Product product)
+        public ActionResult Post(Owner owner)
         {
             try
             {
-                if (product is null)
+                if (owner is null)
                 {
                     return BadRequest();
                 }
 
-                _context.Products.Add(product);
+                _context.Owner?.Add(owner);
                 _context.SaveChanges();
 
-                return new CreatedAtRouteResult("ObterProduto",
-                    new { id = product.Id }, product);
+                return new CreatedAtRouteResult("ObterUsuario",
+                    new { id = owner.OwnerId }, owner);
             }
             catch (Exception)
             {
@@ -85,24 +80,23 @@ namespace API.Nft.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError,
                     "Ocorreu um problema ao tratar sua solicitação.");
             }
-            
         }
 
-        // PUT /<ProductController>/5
+        // PUT /<OwnerController>/5
         [HttpPatch("{id}")]
-        public ActionResult Patch(int id, Product product)
+        public ActionResult Patch(int id)
         {
             try
             {
-                var productToChange = _context.Products.FirstOrDefault(p => p.Id == id);
-                if (productToChange is null)
+                var ownerToChange = _context.Owner?.FirstOrDefault(p => p.OwnerId == id);
+                if (ownerToChange is null)
                 {
-                    return NotFound("Produto não encontrado...");
+                    return NotFound("Usuário não encontrado...");
                 }
-                _context.Update(productToChange);
+                _context.Update(ownerToChange);
                 _context.SaveChanges();
 
-                return Ok(productToChange);
+                return Ok(ownerToChange);
             }
             catch (Exception)
             {
@@ -112,21 +106,21 @@ namespace API.Nft.Controllers
             }
         }
 
-        // DELETE /<ProductController>/5
+        // DELETE /<OwnerController>/5
         [HttpDelete("{id}")]
         public ActionResult Delete(int id)
         {
             try
             {
-                var product = _context.Products?.Find(id);
-                if (product is null)
+                var owner = _context.Owner?.Find(id);
+                if (owner is null)
                 {
-                    return NotFound("Produto não localizado...");
+                    return NotFound("Usuário não localizado...");
                 }
-                _context.Products?.Remove(product);
+                _context.Owner?.Remove(owner);
                 _context.SaveChanges();
 
-                return Ok(product);
+                return Ok(owner);
             }
             catch (Exception)
             {

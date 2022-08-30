@@ -1,5 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace API.Nft.Domain
 {
@@ -14,6 +15,7 @@ namespace API.Nft.Domain
         [Required]
         [StringLength(80)]
         public string? CategoryName { get; set; }
+        [JsonIgnore]
         public ICollection<Product>? Products { get; set; }
         
     }

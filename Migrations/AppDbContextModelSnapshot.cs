@@ -37,7 +37,7 @@ namespace API.Nft.Migrations
 
             modelBuilder.Entity("API.Nft.Domain.Owner", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("OwnerId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
@@ -51,7 +51,7 @@ namespace API.Nft.Migrations
                         .HasMaxLength(80)
                         .HasColumnType("varchar(80)");
 
-                    b.HasKey("Id");
+                    b.HasKey("OwnerId");
 
                     b.ToTable("Owner");
                 });
